@@ -4,7 +4,8 @@ declare y := whole ;
 main
 {
 assign y = 10 ;
-assign z = 5;
-repeat [ y >= z ]
-  listen z ; ;
+assign z = 4;
+repeat [ y <= z ]
+  assign z = z + 1 ; ;
+yell z ;
 }
