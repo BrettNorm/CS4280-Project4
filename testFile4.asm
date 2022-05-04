@@ -27,7 +27,6 @@ POP
 POP
 STOP
 z 0
-y 0
 x 0
 T2 0
 T1 0

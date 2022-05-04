@@ -3,6 +3,7 @@ declare x := whole ;
 declare y := whole ;
 main
 {
+assign y = 10 ;
 repeat
 listen x ;
 until [ y >= x ]

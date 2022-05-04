@@ -1,0 +1,23 @@
+PUSH
+LOAD z
+STORE z
+PUSH
+LOAD y
+STORE y
+LOAD 10
+STORE y
+LOAD 5
+STORE z
+loop1: LOAD z
+STORE T0
+LOAD y
+SUB T0
+BRNEG loop2
+READ z
+BR loop1
+loop2: NOOP
+POP
+STOP
+z 0
+y 0
+T0 0

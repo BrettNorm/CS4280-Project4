@@ -462,12 +462,12 @@ void semCheck(node *semNode, int semCounter, ofstream& oFile) {
 			semCheck(semNode->c1, semCounter, oFile); 
 		}
 
-		if(RO == "=>") {
+		if(RO == ">=") {
 			oFile << "SUB T" << tempVar << "\n";
 			if(semNode->c2 != NULL) { 
 				semCheck(semNode->c2, semCounter, oFile); 
 			}
-        } else if(RO == "=<") {
+        } else if(RO == "<=") {
 			oFile << "SUB T" << tempVar << "\n";
 			if(semNode->c2 != NULL) { 
 				semCheck(semNode->c2, semCounter, oFile); 
@@ -477,12 +477,12 @@ void semCheck(node *semNode, int semCounter, ofstream& oFile) {
 			if(semNode->c2 != NULL) { 
 				semCheck(semNode->c2, semCounter, oFile); 
 			}
-		} else if(RO[0] == '[') {
+		} else if(RO[0] == '...') {
 			oFile << "SUB T" << tempVar << "\n";
 			if(semNode->c2 != NULL) { 
 				semCheck(semNode->c2, semCounter, oFile); 
 			}
-		} else if(RO == "%") {
+		} else if(RO == "!=") {
 			oFile << "MULT T" << tempVar << "\n";
 			if(semNode->c2 != NULL) { 
 				semCheck(semNode->c2, semCounter, oFile); 
@@ -501,7 +501,7 @@ void semCheck(node *semNode, int semCounter, ofstream& oFile) {
 	/* <loop1> */
 	else if(semNode->name == "<loop1>") {
 		int loopOne = ++loopCounter;
-		oFile << "loop" << loopOne << ": ";
+		oFile << "loop1: ";
 		string RO = semNode->c2->t1.token_Instance;
 		if(semNode->c3 != NULL) { 
 			semCheck(semNode->c3, semCounter, oFile); 
@@ -515,12 +515,12 @@ void semCheck(node *semNode, int semCounter, ofstream& oFile) {
 			semCheck(semNode->c1, semCounter, oFile); 
 		}
 
-		if(RO == "=>") {
+		if(RO == ">=") {
 			oFile << "SUB T" << tempVar << "\n";
 			if(semNode->c2 != NULL) { 
 				semCheck(semNode->c2, semCounter, oFile); 
 			}
-		} else if(RO == "=<") {
+		} else if(RO == "<=") {
 			oFile << "SUB T" << tempVar << "\n";
 			if(semNode->c2 != NULL) { 
 				semCheck(semNode->c2, semCounter, oFile); 
@@ -530,13 +530,13 @@ void semCheck(node *semNode, int semCounter, ofstream& oFile) {
 			if(semNode->c2 != NULL) { 
 				semCheck(semNode->c2, semCounter, oFile); 
 			}
-		} else if(RO[0] == '[') {
+		} else if(RO[0] == '...') {
 			oFile << "SUB T" << tempVar << "\n";
 			if(semNode->c2 != NULL) { 
 				semCheck(semNode->c2, semCounter, oFile); 
 			}
-		} else if(RO == "%") {
-			oFile << "MULT T" << tempVar << "\n";
+		} else if(RO == "!=") {
+			oFile << "SUB T" << tempVar << "\n";
 			if(semNode->c2 != NULL) { 
 				semCheck(semNode->c2, semCounter, oFile); 
 			}
@@ -595,13 +595,13 @@ void semCheck(node *semNode, int semCounter, ofstream& oFile) {
 	/* <RO> */
 	else if(semNode->name == "<RO>") {
 		if(semNode->t1.ID_tk == Greater_equal_tk) {
-				oFile << "BRZPOS loop" << (loopCounter + 1) << "\n";
+				oFile << "BRNEG loop" << (loopCounter + 1) << "\n";
 		} else if(semNode->t1.ID_tk == Lesser_equal_tk) {
-				oFile << "BRZNEG loop" << (loopCounter + 1) << "\n";
+				oFile << "BRPOS loop" << (loopCounter + 1) << "\n";
 		} else if(semNode->t1.ID_tk == Equal_equal_tk) {
 				oFile << "BRZERO loop" << (loopCounter + 1) << "\n";
 		} else if(semNode->t1.ID_tk == Dot_tk) {
-				oFile << "BRZERO loop" << (loopCounter + 1) << "\n";
+				oFile << "BRZPOS loop" << (loopCounter + 1) << "\n";
 		} else if(semNode->t1.ID_tk == Not_equal_tk) {
 				oFile << "BRPOS loop" << (loopCounter + 1) << "\n";
 				oFile << "BRNEG loop" << (loopCounter + 1) << "\n";

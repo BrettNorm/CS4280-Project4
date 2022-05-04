@@ -1,16 +1,10 @@
 ## p2g5 ##
-declare _z := whole ;
+declare z := whole ;
 declare y := whole ;
 main
 {
-declare y := whole ;
 assign y = 10 ;
+assign z = 5;
 repeat [ y >= z ]
-  {
-  declare z := whole ;
-     {
-     yell x ; 
-     }
-  } ;
-yell x ;
+  listen z ; ;
 }
