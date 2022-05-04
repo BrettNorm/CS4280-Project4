@@ -1,5 +1,7 @@
 ## p2g1, remember to try variants of this with each different statement ##
+declare x := whole ;
 main
 {
-listen x ;
+    assign x = 10 ; 
+    yell x ;
 }

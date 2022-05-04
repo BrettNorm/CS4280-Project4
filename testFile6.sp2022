@@ -4,8 +4,7 @@ declare b := whole ;
 declare c := whole ;
 main
 {
-    declare a := whole ;
     assign a = 3 ;
     assign c = 19 ;
-    yell ( 2 * a / 5 + c - % 11 + ( 13 * % 17 ) ) ;
+    yell ( 2 * a / 5 + c - 11 + ( 13 * 17 ) ) ;
 }

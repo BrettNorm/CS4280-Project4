@@ -1,14 +1,12 @@
 ## p2g4 ##
 declare z := whole ;
+declare x := whole ;
 main
 {
 declare y := whole ;
-repeat
-listen x ;
-until [ y >= x ]
 assign y = 10 ;
 assign z = 17 ;
 repeat [ y <= z ]
-    assign x = y ;;
+    assign x = y ; ;
 yell x ;
 }
