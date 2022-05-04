@@ -34,7 +34,9 @@ struct token {
 	tokenID ID_tk;
 	string token_Instance;
 	int line;
+	int semScope;
 };
+
 
 
 

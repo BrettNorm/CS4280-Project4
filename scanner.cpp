@@ -18,10 +18,10 @@ token keyworkTokens[] = {
 findToken tokenKeys[] = {
 	{-1, EOF_tk},  {-2, ERROR_tk}, {1000, IDENT_tk}, {1001, NUM_tk}, {1002, Equals_tk}, {1003, Greater_equal_tk}, 
 	{1004, Lesser_equal_tk}, {1005, Colon_tk}, {1006, Not_equal_tk}, {1007, Equal_equal_tk}, {1008, Asterisk_tk}, 
-	{1009, Modulus_tk}, {1010, For_slash_tk}, {1011, Plus_tk}, {1012, Minus_tk}, {1013, Open_par_tk}, 
+	{1009, Modulus_tk}, {1010, For_slash_tk}, {1011, Plus_tk}, {1012, Dot_tk}, {1013, Open_par_tk}, 
 	{1014, Close_par_tk}, {1015, Comma_tk}, {1016, Open_curly_tk}, {1017, Close_curly_tk}, {1018, Semicolon_tk,}, 
 	{1019, Open_square_tk}, {1020, Close_square_tk}, {1021, Open_square_tk}, {1022, Close_square_tk}, 
-	{1023, Open_curly_tk}, {1024, Colon_equals_tk}
+	{1023, Open_curly_tk}, {1024, Colon_equals_tk}, {1025, Minus_tk}
 };
 
 /* characters and their columns */
@@ -37,13 +37,13 @@ int fsaTable[26][20] = {
 	{   0,    1,    2,    3,    4,    5,    6,    7,    8,    9,   10,   11,   12,   13,   14,   15,   16,   17,   18,   -1}, /* state 0 */
 	{1000,    1,    1, 1000, 1000, 1000, 1000, 1012, 1000, 1000, 1000, 1000, 1000, 1000, 1000, 1000, 1000, 1000, 1000, 1000}, /* state 1 */
 	{1001, 1001,    2, 1001, 1001, 1001, 1001, 1001, 1001, 1001, 1001, 1001, 1001, 1001, 1001, 1001, 1001, 1001, 1001, 1001}, /* state 2 */
-	{1002, 1002, 1002,   22,   23,   24, 1002, 1002, 1002, 1002, 1002, 1002, 1002, 1002, 1002, 1002, 1002, 1002, 1002, 1002}, /* state 3 */
+	{1002, 1002, 1002,   22, 1002, 1002, 1002, 1002, 1002, 1002, 1002, 1002, 1002, 1002, 1002, 1002, 1002, 1002, 1002, 1002}, /* state 3 */
 	{1005, 1005, 1005, 1005, 1005, 1005, 1005, 1005, 1005, 1005, 1005, 1005, 1005, 1005, 1005, 1005, 1005, 1005, 1005, 1005}, /* state 4 */
-	{   9,    9,    9, 1002, 1004, 1002, 1002, 1002, 1002, 1002, 1002, 1002, 1002, 1002, 1002, 1002, 1002, 1002, 1002, 1002}, /* state 5 */ 
-	{1012, 1012, 1012, 1012, 1012, 1012, 1012, 1012, 1012, 1012, 1012, 1012, 1012, 1012, 1012, 1012, 1012, 1012, 1012, 1012}, /* state 6 */
-	{1008, 1008, 1008,   25, 1008, 1008, 1008, 1008, 1008, 1008, 1008, 1008, 1008, 1008, 1008, 1008, 1008, 1008, 1008, 1008}, /* state 7 */
+	{1011, 1011, 1011, 1011, 1011, 1011, 1011, 1011, 1011, 1011, 1011, 1011, 1011, 1011, 1011, 1011, 1011, 1011, 1011, 1011}, /* state 5 */ 
+	{1025, 1025, 1025, 1025, 1025, 1025, 1025, 1025, 1025, 1025, 1025, 1025, 1025, 1025, 1025, 1025, 1025, 1025, 1025, 1025}, /* state 6 */
+	{1008, 1008, 1008, 1008, 1008, 1008, 1008, 1008, 1008, 1008, 1008, 1008, 1008, 1008, 1008, 1008, 1008, 1008, 1008, 1008}, /* state 7 */
 	{1010, 1010, 1010, 1010, 1010, 1010, 1010, 1010, 1010, 1010, 1010, 1010, 1010, 1010, 1010, 1010, 1010, 1010, 1010, 1010}, /* state 8 */
-	{1009, 1009, 1009, 1009, 1009, 1009, 1009, 1009, 1009, 1011, 1011, 1011, 1011, 1011, 1011, 1011, 1011, 1011, 1011, 1011}, /* state 9 */
+	{1009, 1009, 1009, 1009, 1009, 1009, 1009, 1009, 1009, 1009, 1009, 1009, 1009, 1009, 1009, 1009, 1009, 1009, 1009, 1009}, /* state 9 */
 	{1012, 1012, 1012, 1012, 1012, 1012, 1012, 1012, 1012, 1012, 1012, 1012, 1012, 1012, 1012, 1012, 1012, 1012, 1012, 1012}, /* state 10 */
 	{1013, 1013, 1013, 1013, 1013, 1013, 1013, 1013, 1013, 1013, 1013, 1013, 1013, 1013, 1013, 1013, 1013, 1013, 1013, 1013}, /* state 11 */
 	{1014, 1014, 1014, 1014, 1014, 1014, 1014, 1014, 1014, 1014, 1014, 1014, 1014, 1014, 1014, 1014, 1014, 1014, 1014, 1014}, /* state 12 */
@@ -87,7 +87,7 @@ token scanner(ifstream& inFile, int line) {
 	
 				/* if comment started but not closed */
 				if(inFile.eof()) {
-					cout << "SCANNER ERROR: comment started at line " << line << " but never closed\n";
+					cout << "scanner.cpp: comment started at line " << line << " but never closed\n";
 					Scanner_tk.ID_tk = ERROR_tk;
 					Scanner_tk.line = line;
 					Scanner_tk.token_Instance = "Error";
@@ -153,7 +153,7 @@ token scanner(ifstream& inFile, int line) {
 				}
 				return Scanner_tk;
 		} else if(stateColumn == -2) {
-			cout << "SCANNER ERROR: at line " << lineNum << " invalid character: " << currentChar << "\n";	
+			cout << "scanner.cpp: at line " << lineNum << " invalid character: " << currentChar << "\n";	
 			Scanner_tk.token_Instance = currentChar;
 			Scanner_tk.ID_tk = ERROR_tk;
 			Scanner_tk.line = lineNum;
@@ -167,6 +167,7 @@ token scanner(ifstream& inFile, int line) {
 				Scanner_tk = find(nextState, String_tk);
 				Scanner_tk.line = lineNum;
 				inFile.unget();
+
 
 				return Scanner_tk;
 			}
@@ -187,7 +188,7 @@ token scanner(ifstream& inFile, int line) {
 			
 			/* if > 8 characters */
 			if(String_tk.length() > 8) {
-				cout << "SCANNER ERROR: line number: " << lineNum << "\n";
+				cout << "scanner.cpp: line number: " << lineNum << "\n";
 				cout << "More than 8 characters: " << String_tk << "\n";
 				Scanner_tk.token_Instance = "ERROR";
 				Scanner_tk.ID_tk = ERROR_tk;
@@ -206,8 +207,8 @@ token scanner(ifstream& inFile, int line) {
 		}
 	}
 		
-	/* if all else fails, we're catching what we assume is scanner error at this point */
-	Scanner_tk.token_Instance = "SCANNER ERROR: Scanner Failure\n";
+	/* if all else fails, we're catching what we assume is scanner.cpp at this point */
+	Scanner_tk.token_Instance = "scanner.cpp: Scanner Failure\n";
 	Scanner_tk.ID_tk = ERROR_tk;
 	Scanner_tk.line = lineNum;
 	

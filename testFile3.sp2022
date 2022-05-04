@@ -1,0 +1,10 @@
+## p2g3 ##
+declare x := whole ;
+declare y := whole ;
+main
+{
+repeat
+listen x ;
+until [ y >= x ]
+yell z ;
+}

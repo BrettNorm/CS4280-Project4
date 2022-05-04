@@ -1,47 +1,40 @@
 /*
-	main function for driving project. Three different invocation methods as stated in README
+*** Author: Brett Bax
+*** Assignment: Project 3
+*** Class: CS4280
+***
+*** main.cpp is the main driver for Project 3.
 */
 
-#include "scanner.h"
+
+#include "parser.h"
+#include "makeTree.h"
+#include "statSem.h"
+
+using namespace std;
 
 int main(int argc, char *argv[]) {
 	
 	ifstream inFile;
 	string file;
-	
-	if(argc == 1){
-		try {
-			string input;
-			ofstream inputFile;
-			file = "userInputFile.sp2022";
-			inputFile.open(file.c_str());
-			while(getline(cin, input)) {
-				inputFile << input << "\n";
-			}
 
-			inputFile.close();
-
-		} catch(const ifstream::failure& e){
-			cout << "File does not exist\n";
-			return 1;
-		}
-
-	} else if(argc == 2){
+	if(argc == 2){
 		file = argv[1];
 		file.append(".sp2022");
 
 	} else if(argc > 2){ 
-		cout << "ERROR: Too many arguments. 2 or less, please.\n";
-		cout << "USAGE: 	   './scanner'	(hit enter, then keyboard input to userInputFile),\n";
-		cout << "	or './scanner [fileName]'	(.sp2022 extension added automatically),\n";
-		cout << "  	or './scanner < [fileName.ext]'\n";
+		cout << "main.cpp: Too many arguments. 2 or less, please.\n";
+		cout << "USAGE: 	   './statSem'	(hit enter, then keyboard input to userInputFile),\n";
+		cout << "	or './statSem [fileName]'	(.sp2022 extension added automatically),\n";
+		cout << "  	or './statSem < [fileName.ext]'\n";
 		return 1;
 	}
 	cout << "\nOpening file stream...\n\n";
 	inFile.open(file.c_str());
-	testScanner(inFile);
 
-	
+	node *parseTree = parser(inFile);
+	semCheck(parseTree, 0);
+
 	inFile.close();
 	cout << "\nFile stream closed. Bye!\n\n";
 		
