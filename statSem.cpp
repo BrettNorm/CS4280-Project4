@@ -3,17 +3,16 @@
 
 using namespace std;
 
+static bool globalFlag = true;
+static bool loopFlag = false;
 static int vCounter = 0;
 static int scopeNum = 0;
 static int checkLine = 0;
 static int tempCounter = 0;
-static bool isGlobal = true;
-static bool isLoop = false;
 static int globalCounter = 0;
 static int loopCounter = 0;
 static int localCounter = 0;
 static int pushCounter = 0;
-
 token semStack[100];
 
 /* push to stack */
@@ -128,9 +127,9 @@ void semCheck(node *semNode, int semCounter, ofstream& oFile) {
 
 	/* <block> */
 	else if(semNode->name == "<block>") {
-		int semNum = 0;
 		scopeNum++;
-		isGlobal = false;
+		int semNum = 0;
+		globalFlag = false;
 
 		if(semNode->c1 != NULL) { 
 			semCheck(semNode->c1, semNum, oFile);
@@ -150,15 +149,7 @@ void semCheck(node *semNode, int semCounter, ofstream& oFile) {
 		semFound = semLocalFind(semNode->t2.token_Instance);
 		
 		if(semFound > semCounter || semFound == -1) {
-			if (isGlobal == true) {
-				semPush(semNode->t2);
-				oFile << "PUSH\n";
-				pushCounter++;
-				oFile << "LOAD " << semNode->t2.token_Instance << "\n";
-				oFile << "STORE " << semNode->t2.token_Instance << "\n";
-				globalCounter++;
-				semCounter++;
-			} else {
+			if (globalFlag == false) {
 				semPush(semNode->t2);
 				oFile << "PUSH\n";
 				pushCounter++;
@@ -167,9 +158,19 @@ void semCheck(node *semNode, int semCounter, ofstream& oFile) {
 				semFound = semLocalOrParent(semNode->t2.token_Instance);
 				oFile << "STACKW " << (vCounter - 1 - semFound) << "\n";
 				semNode->t2.semScope = scopeNum;
-				localCounter++;
-				tempCounter++; 
 				semCounter++;
+				localCounter++;
+				tempCounter++; 				
+				
+			} else {
+				semPush(semNode->t2);
+				oFile << "PUSH\n";
+				pushCounter++;
+				oFile << "LOAD " << semNode->t2.token_Instance << "\n";
+				oFile << "STORE " << semNode->t2.token_Instance << "\n";
+				semCounter++;
+				globalCounter++;
+				
 			}
 			
 		} else if(semFound < semCounter) {
@@ -200,8 +201,9 @@ void semCheck(node *semNode, int semCounter, ofstream& oFile) {
 	else if(semNode->name == "<expr>") {
 		if(semNode->t1.ID_tk == Minus_tk) {
 			int exprVar = tempCounter;
-			tempCounter++;
 			localCounter++;
+			tempCounter++;
+
 			if(semNode->c1 != NULL) {
 				semCheck(semNode->c1, semCounter, oFile); 
 			}
@@ -223,8 +225,8 @@ void semCheck(node *semNode, int semCounter, ofstream& oFile) {
 	else if(semNode->name == "<N>") {
 		if(semNode->t1.ID_tk == For_slash_tk) {
 			int tempVar = tempCounter;
-			tempCounter++;
 			localCounter++;
+			tempCounter++;
 
 			if(semNode->c1 != NULL) { 
 				semCheck(semNode->c1, semCounter, oFile); 
@@ -234,10 +236,12 @@ void semCheck(node *semNode, int semCounter, ofstream& oFile) {
 				semCheck(semNode->c2, semCounter, oFile); 
 			}
 			oFile << "DIV T" << tempVar << "\n";
+
 		} else if(semNode->t1.ID_tk == Plus_tk) {
 			int tempVar = tempCounter;
-			tempCounter++;
 			localCounter++;
+			tempCounter++;
+
 			if(semNode->c1 != NULL) { 
 				semCheck(semNode->c1, semCounter, oFile); 
 			}
@@ -246,6 +250,7 @@ void semCheck(node *semNode, int semCounter, ofstream& oFile) {
 				semCheck(semNode->c2, semCounter, oFile); 
 			}
             oFile << "ADD T" << tempVar << "\n";
+
 		} else {
 			if(semNode->c1 != NULL) { 
 				semCheck(semNode->c1, semCounter, oFile);
@@ -258,16 +263,19 @@ void semCheck(node *semNode, int semCounter, ofstream& oFile) {
 	else if(semNode->name == "<A>") {
 		if(semNode->t1.ID_tk == Asterisk_tk) {
 			int tempVar = tempCounter;
-			tempCounter++;
 			localCounter++;
+			tempCounter++;
+
 			if(semNode->c1 != NULL) { 
 				semCheck(semNode->c1, semCounter, oFile); 
 			}
 			oFile << "STORE T" << tempVar << "\n";
+
             if(semNode->c2 != NULL) { 
 				semCheck(semNode->c2, semCounter, oFile); 
 			}
 			oFile << "MULT T" << tempVar << "\n";
+
 		} else {
 			if(semNode->c1 != NULL) { 
 				semCheck(semNode->c1, semCounter, oFile); 
@@ -283,6 +291,7 @@ void semCheck(node *semNode, int semCounter, ofstream& oFile) {
 				semCheck(semNode->c1, semCounter, oFile); 
 			}
 			oFile << "MULT -1\n";
+			
 		} else {
 			if(semNode->c1 != NULL) { 
 				semCheck(semNode->c1, semCounter, oFile); 
@@ -297,6 +306,7 @@ void semCheck(node *semNode, int semCounter, ofstream& oFile) {
 			if(semNode->c1 != NULL) { 
 				semCheck(semNode->c1, semCounter, oFile); 
 			}
+
 		} else if(semNode->t1.ID_tk == IDENT_tk) {
 			int semFound = semLocalOrParent(semNode->t1.token_Instance);
 			if(semFound == -1) {
@@ -304,22 +314,16 @@ void semCheck(node *semNode, int semCounter, ofstream& oFile) {
 				cout << "\nExiting program...\n";
 				exit(1); 
 			}
-			if(semStack[semFound].semScope == 0) {
-				oFile << "LOAD " << semStack[semFound].token_Instance << "\n";
-			} else {
+			if(semStack[semFound].semScope != 0) {
 				oFile << "STACKR " << (vCounter - 1 - semFound) << "\n";
+			} else {
+				
+				oFile << "LOAD " << semStack[semFound].token_Instance << "\n";
 			}
 
-
 		} else if(semNode->t1.ID_tk == NUM_tk) {
-			// int semFound = semLocalOrParent(semNode->t1.token_Instance);
-			// cout << semNode->t1.token_Instance << "\n";
-			// if(semFound == -1) {
-			// 	cout << "statSem.cpp <R> NUM: " << semNode->t1.token_Instance << " on line " << semNode->t1.line <<" not declared in current scope\n";
-			// 	cout << "\nExiting program...\n";
-			// 	exit(1); 
-			// }
 			oFile << "LOAD " << semNode->t1.token_Instance << "\n";
+
 		} else {
 			if(semNode->c1 != NULL) { 
 				semCheck(semNode->c1, semCounter, oFile); 
@@ -403,17 +407,21 @@ void semCheck(node *semNode, int semCounter, ofstream& oFile) {
 		if(semNode->t1.ID_tk == Listen_tk) {
 			int semFound = semLocalOrParent(semNode->t2.token_Instance);
 			if(semFound == -1) {
-				// cout << "statSem.cpp: " << semNode->t2.token_Instance << " on line " << semNode->t2.line <<" not declared in current scope\n";
-				// cout << "\nExiting program...\n";
-                // exit(1);
+				/* 
+					cout << "statSem.cpp: " << semNode->t2.token_Instance << " on line " << semNode->t2.line <<" not declared in current scope\n";
+					cout << "\nExiting program...\n";
+					exit(1);
+				*/
                 int tempVar = tempCounter;
-                tempCounter++;
                 localCounter++;
+                tempCounter++;
 
 				oFile << "PUSH\n";
 				pushCounter++;
+
 				oFile << "READ T" << tempVar << "\n";
 				oFile << "LOAD T" << tempVar << "\n";
+
 				semFound = semLocalOrParent(semNode->t2.token_Instance);
 				oFile << "STACKW " << (vCounter - 1 - semFound) << "\n";
 
@@ -449,51 +457,29 @@ void semCheck(node *semNode, int semCounter, ofstream& oFile) {
 	else if(semNode->name == "<if>") {
 		int loopVar = ++loopCounter;
 		oFile << "loop" << loopVar << ": ";
-		string RO = semNode->c2->t1.token_Instance;
 		if(semNode->c3 != NULL) { 
 			semCheck(semNode->c3, semCounter, oFile); 
 		}
 		int tempVar = tempCounter;
-		tempCounter++;
 		localCounter++;
+		tempCounter++;
 
 		oFile << "STORE T" << tempVar << "\n";
 		if(semNode->c1 != NULL) { 
 			semCheck(semNode->c1, semCounter, oFile); 
 		}
 
-		if(RO == ">=") {
-			oFile << "SUB T" << tempVar << "\n";
-			if(semNode->c2 != NULL) { 
-				semCheck(semNode->c2, semCounter, oFile); 
-			}
-        } else if(RO == "<=") {
-			oFile << "SUB T" << tempVar << "\n";
-			if(semNode->c2 != NULL) { 
-				semCheck(semNode->c2, semCounter, oFile); 
-			}
-        } else if(RO == "==") {
-			oFile << "SUB T" << tempVar << "\n";
-			if(semNode->c2 != NULL) { 
-				semCheck(semNode->c2, semCounter, oFile); 
-			}
-		} else if(RO[0] == '.') {
-			oFile << "SUB T" << tempVar << "\n";
-			if(semNode->c2 != NULL) { 
-				semCheck(semNode->c2, semCounter, oFile); 
-			}
-		} else if(RO == "!=") {
-			oFile << "MULT T" << tempVar << "\n";
-			if(semNode->c2 != NULL) { 
-				semCheck(semNode->c2, semCounter, oFile); 
-			}
+		oFile << "SUB T" << tempVar << "\n";
+		if(semNode->c2 != NULL) { 
+			semCheck(semNode->c2, semCounter, oFile); 
 		}
 
 		if(semNode->c4 != NULL) { 
 			semCheck(semNode->c4, semCounter, oFile); 
 		}
-
-		oFile << "loop" << (loopVar + 1) << ": NOOP\n";
+		loopVar++;
+		oFile << "loop" << (loopVar) << ": NOOP\n";
+		loopVar--;
 		loopCounter++;
 	}
 
@@ -517,7 +503,6 @@ void semCheck(node *semNode, int semCounter, ofstream& oFile) {
 		}
 		int loopOne = ++loopCounter;
 		oFile << "loop1: ";
-		string RO = semNode->c2->t1.token_Instance;
 		if(semNode->c1 != NULL) { 
 			semCheck(semNode->c1, semCounter, oFile); 
 		}
@@ -545,7 +530,7 @@ void semCheck(node *semNode, int semCounter, ofstream& oFile) {
 	else if(semNode->name == "<loop2>") {
 		int loopOne = loopCounter++;
 		oFile << "loop1: ";			
-		string RO = semNode->c3->t1.token_Instance;
+
 		int tempVar = tempCounter;
 		oFile << "STORE T" << tempVar << "\n";
 		tempCounter++;
@@ -584,21 +569,22 @@ void semCheck(node *semNode, int semCounter, ofstream& oFile) {
 		if(semNode->c1 != NULL) { 
 			semCheck(semNode->c1, semCounter, oFile); 
 		}
-		if(semStack[semFound].semScope == 0) {
-			oFile << "STORE " << semNode->t2.token_Instance << "\n";
-		} else if(semStack[semFound].semScope > 0) {
+		if(semStack[semFound].semScope > 0) {
 			oFile << "STORE T" << (vCounter - 1 - semFound) << "\n";
 			oFile << "STACKW " << (vCounter - 1 - semFound) << "\n";
+			
+		} else if(semStack[semFound].semScope == 0) {
+			oFile << "STORE " << semNode->t2.token_Instance << "\n";
 		}
 	}
 
 
-	/* <RO> */
+	/* <R0> */
 	else if(semNode->name == "<RO>") {
 		if(semNode->t1.ID_tk == Greater_equal_tk) {
-				oFile << "BRNEG loop" << (loopCounter + 1) << "\n";
+				oFile << "BRZNEG loop" << (loopCounter + 1) << "\n";
 		} else if(semNode->t1.ID_tk == Lesser_equal_tk) {
-				oFile << "BRPOS loop" << (loopCounter + 1) << "\n";
+				oFile << "BRZPOS loop" << (loopCounter + 1) << "\n";
 		} else if(semNode->t1.ID_tk == Equal_equal_tk) {
 				oFile << "BRZERO loop" << (loopCounter + 1) << "\n";
 		} else if(semNode->t1.ID_tk == Dot_tk) {
@@ -614,7 +600,7 @@ void semCheck(node *semNode, int semCounter, ofstream& oFile) {
 	else if(semNode->name == "<label>") {
 		int semFound = semLocalFind(semNode->t2.token_Instance);
 
-		if(semFound == -1 || semFound > semCounter) {
+		if(semFound > semCounter || semFound == -1) {
 			semPush(semNode->t2);
 			semCounter++;
 			oFile << semNode->t2.token_Instance << ": NOOP\n";

@@ -10,7 +10,7 @@ loop1: STORE T0
 READ x
 LOAD x
 SUB T0
-BRPOS loop2
+BRZERO loop2
 LOAD y
 BR loop1
 loop2: NOOP
@@ -20,3 +20,7 @@ WRITE T1
 POP
 POP
 STOP
+x 0
+y 0
+T1 0
+T0 0

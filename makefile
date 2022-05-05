@@ -1,6 +1,6 @@
 CC	= g++
 CFLAGS	= -g -std=c++11
-TARGET	= statSem
+TARGET	= compfs
 OBJS	= main.o parser.o scanner.o statSem.o
 
 $(TARGET): $(OBJS)
@@ -26,4 +26,4 @@ statSem.o: statSem.cpp
 
 
 clean:
-	rm -rf *.o statSem
+	rm -rf *.o compfs ./*.asm

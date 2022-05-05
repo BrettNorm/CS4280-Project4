@@ -17,14 +17,27 @@ int main(int argc, char *argv[]) {
 	
 	ifstream inFile;
 	ofstream outFile;
+	ofstream tFile;
 	string file;
 	string outputFile;
+	string input;
 
 	if(argc == 2){
 		file = argv[1];
 		outputFile = argv[1];
 		outputFile.append(".asm");
 		file.append(".sp2022");
+
+	} else if (argc == 1) {
+		outputFile = "kb.asm";
+		file = "tempFile.sp2022";
+		tFile.open(file.c_str());
+
+		while (getline(cin, input)) {
+			tFile << input << "\n";
+		}
+
+		tFile.close();
 
 	} else if(argc > 2){ 
 		cout << "main.cpp: Too many arguments. 2 or less, please.\n";
@@ -33,7 +46,7 @@ int main(int argc, char *argv[]) {
 		cout << "  	or './statSem < [fileName.ext]'\n";
 		return 1;
 	}
-	cout << "\nOpening file stream...\n\n";
+	cout << "\nOpening file stream...\n";
 	inFile.open(file.c_str());
 	outFile.open(outputFile.c_str());
 

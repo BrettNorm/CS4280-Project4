@@ -6,6 +6,6 @@ main
 assign y = 10 ;
 repeat
 listen x ;
-until [ y <= x ]
+until [ y == x ]
 yell x ;
 }

@@ -1,10 +1,10 @@
-Assignment: Project 3 - ***LOCAL OPTION***
+Assignment: Project 4 - ***LOCAL OPTION***
 Author: Brett Bax
 Class: CS 4280
 Teacher: Mark Hauschild
 
 
-Project will be invoked as 'statSem'. ***LOCAL OPTION***
+Project will be invoked as 'compfs'. ***LOCAL OPTION***
 
 To run:
 
@@ -13,7 +13,7 @@ To run:
 	
 	through pre-existing file (program adds extension .sp2022): 
 
-		>./statSem [file]
+		>./compfs [file]
 
 
 
