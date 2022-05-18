@@ -29,4 +29,6 @@ To run:
 
 Generated code ran on: https://comp.umsl.edu/assembler/interpreter
 
-
+https://github.com/BrettNorm/CS4280-Project4/blob/master/P4_screenshot1.png
+https://github.com/BrettNorm/CS4280-Project4/blob/master/P4_screenshot2.png
+https://github.com/BrettNorm/CS4280-Project4/blob/master/P4_screenshot3.png
