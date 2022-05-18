@@ -553,7 +553,6 @@ node* loop1(ifstream& inFile) {
 			newNode->c4 = stat(inFile);
 
 			return newNode;
-			
 
 		} else {
 			cout << "Parser.cpp: Wrong token in loop1... wanting Close Bracket but received " << tokenNames[pToken.ID_tk] << " on line " << depth << "\n";

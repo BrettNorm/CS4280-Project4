@@ -4,9 +4,10 @@ declare x := whole ;
 main
 {
 declare y := whole ;
-assign y = 10 ;
+assign x = 5 ;
+assign y = 20 ;
 assign z = 17 ;
-repeat [ y <= z ]
-    assign x = y ; ;
+repeat [ y >= z ]
+    assign y = y - 1 ; ;
 yell x ;
 }

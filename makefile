@@ -12,14 +12,9 @@ main.o: main.cpp
 parser.o: parser.cpp
 	$(CC) $(CFLAGS) -c parser.cpp
 
-# makeTree.o: makeTree.cpp
-# 	$(CC) $(CFLAGS) -c makeTree.cpp
 
 scanner.o: scanner.cpp
 	$(CC) $(CFLAGS) -c scanner.cpp
-
-# testScanner.o: testScanner.cpp
-# 	$(CC) $(CFLAGS) -c testScanner.cpp
 
 statSem.o: statSem.cpp
 	$(CC) $(CFLAGS) -c statSem.cpp

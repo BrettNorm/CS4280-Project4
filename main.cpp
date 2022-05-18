@@ -51,7 +51,7 @@ int main(int argc, char *argv[]) {
 	node *parseTree = parser(inFile);
 	semCheck(parseTree, 0, outFile);
 
-	cout << outputFile << "\n";
+	cout << "\n" << outputFile << "\n";
 
 	inFile.close();
 	outFile.close();

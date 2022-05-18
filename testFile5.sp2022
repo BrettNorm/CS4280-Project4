@@ -5,7 +5,7 @@ main
 {
 assign y = 10 ;
 assign z = 4;
-repeat [ y == z ]
+repeat [ y >= z ]
   assign z = z + 1 ; ;
 yell z ;
 }
