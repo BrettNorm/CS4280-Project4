@@ -29,4 +29,7 @@ To run:
 
 Generated code ran on: https://comp.umsl.edu/assembler/interpreter
 
+<img width="646" alt="Screen Shot 2022-05-18 at 1 48 23 PM" src="https://user-images.githubusercontent.com/76761888/169126704-f7ad4b4c-491e-4d44-9bdc-1939e88f7221.png">
+<img width="271" alt="Screen Shot 2022-05-18 at 1 47 14 PM" src="https://user-images.githubusercontent.com/76761888/169126773-206dafd3-c3ab-4159-9014-623e99fa720a.png">
+<img width="1355" alt="Screen Shot 2022-05-18 at 1 47 40 PM" src="https://user-images.githubusercontent.com/76761888/169126817-4445e21b-4bfd-4d16-bddf-78f7d647aeac.png">
 
