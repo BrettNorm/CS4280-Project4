@@ -33,3 +33,9 @@ Generated code ran on: https://comp.umsl.edu/assembler/interpreter
 <img width="271" alt="Screen Shot 2022-05-18 at 1 47 14 PM" src="https://user-images.githubusercontent.com/76761888/169126773-206dafd3-c3ab-4159-9014-623e99fa720a.png">
 <img width="1355" alt="Screen Shot 2022-05-18 at 1 47 40 PM" src="https://user-images.githubusercontent.com/76761888/169126817-4445e21b-4bfd-4d16-bddf-78f7d647aeac.png">
 
+
+
+
+Based on following grammar/BNF: ![image](https://user-images.githubusercontent.com/76761888/176730358-9e883232-1889-490f-a3b4-e6c59088039a.png)
+
+
